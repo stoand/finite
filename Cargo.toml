@@ -1,6 +1,9 @@
 [package]
-name = "handlebars-vdom"
+name = "handlebars-vdom-codegen"
 version = "0.1.0"
 authors = ["Andreas <shadowstep7@gmail.com>"]
+
+[lib]
+proc-macro = true
 
 [dependencies]
