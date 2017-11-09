@@ -1,0 +1,9 @@
+[REQ-purpose]
+text = '''
+The purpose of the handlebars-vdom project is to create a view library
+for Rust frontend apps.
+
+This view library allows frontend developers to benefit both from
+the fast editing cycle of dynamic (runtime-compiled) templates,
+with the integrity checks of static templates.
+'''

@@ -1,0 +1,24 @@
+[REQ-handlebars]
+partof = 'REQ-purpose'
+text = '''
+The handlebars template syntax as seen on [handlebarsjs.com](http://handlebarsjs.com/) will be supported.
+
+The main difference between handlebars-vdom and regular handlebars
+is that multiple component templates in a single template file are both supported
+and encouraged.
+'''
+
+[SPC-handlebars]
+text = '''
+Handlebars templates
+'''
+
+[SPC-handlebars-componentblock]
+text = '''
+
+A component block is an area of the handlebars component
+template file that belongs to a declared component.
+
+The start of a component block is declared as such: `{{! @::ComponentStructName }}`
+where `::ComponentStructName` is the Rust module path to a Rust struct, or enum variant
+'''

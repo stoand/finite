@@ -1,0 +1,57 @@
+[REQ-vdom]
+partof = 'REQ-purpose'
+text = '''
+Handlebars-vdom needs to be able to create a virtual 
+dom representation from views provided to it.
+
+It must then be able to render this virtual dom
+while only performing the minimal dom operations needed.
+'''
+
+[SPC-vdom]
+text = '''
+Handlebars-vdom allows components to be transpiled into
+functions that return the necessary diffing operations that need to be applied
+to the dom for the element to be created, updated or deleted.
+
+A list of these operations will then be sent to a Javascript function which 
+in turn blindly calls the required Javascript functions to peform the dom modifications.
+'''
+
+[SPC-vdom-renderer]
+text = '''
+The Javascript renderer is a relativly simple Javascript function
+that takes a list of dom operations as a JSON string, parses them,
+and performs the needed [[SPC-vdom-ops]] in a stack based manner.
+'''
+
+[SPC-vdom-static]
+text = '''
+The static vdom renderer takes a handlebars source file as input, 
+parses it, and outputs a Rust file that implements render functions for
+all components which create a list of vdom operations.
+'''
+
+[SPC-vdom-dynamic]
+text = '''
+The dynamic dom renderer allows changes to template files to be previewed
+almost instantly.
+
+Dynamic changes have certain limitations however. Only changes to HTML are allowed.
+Any content inside the handlebars {{ }} should remain untouched if dynamic rerendering is desired.
+
+If content inside the handlebars is changed, a warning will appear, and no further dynamic changes can be made,
+and the template will need to be statically re-rendered.
+'''
+
+[SPC-vdom-ops]
+text = '''
+The vdom operations represent dom changes that should be performed on the
+currently head node ie. the node at the top of the stack.
+
+The node or it's parent do not need to be provided because they can be retrieved from
+the node stack.
+
+To change an attribute for example, only the attribe and it's value need to provided and
+the changes will be applied to the top node on the stack.
+'''
