@@ -1,16 +1,30 @@
-mod vdom;
+#[macro_use]
+extern crate quote;
+extern crate proc_macro;
+extern crate walkdir;
 
-/// Compiles handlesbars files into virtual dom rendering files.
-/// 
-/// Usage in `build.rs`:
-/// 
-/// ```rust
-/// fn main() {
-/// 
-/// }
-/// ```
-pub fn template_codegen() {
+use std::path::Path;
+use proc_macro::TokenStream;
+use std::env;
+use walkdir::WalkDir;
+
+#[proc_macro_derive(HandlebarsTemplates)]
+pub fn derive(_input: TokenStream) -> TokenStream {
     
+    let root = env::var("CARGO_MANIFEST_DIR").unwrap_or(".".into());
+    let files = WalkDir::new(root).into_iter().filter_map(|e| e.ok());
+
+    for entry in  {
+        println!("{}", entry.unwrap().path().display());
+    }
+
+    let source = quote! {
+        // impl From<Asdf> for A {
+
+        // }
+    };
+
+    source.parse().unwrap()
 }
 
 #[cfg(test)]
