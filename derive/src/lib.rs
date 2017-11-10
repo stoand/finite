@@ -5,13 +5,20 @@ extern crate quote;
 extern crate syn;
 extern crate walkdir;
 
+use std::fs::File;
+use std::io::BufReader;
+use std::io::prelude::*;
+
 use std::path::Path;
 use proc_macro::TokenStream;
 use std::env;
 use walkdir::WalkDir;
 
+use quote::Tokens;
 use syn::MetaItem::NameValue;
 use syn::Lit::Str;
+
+mod vdom;
 
 #[proc_macro_derive(HandlebarsTemplates, attributes(match_files))]
 pub fn derive(input: TokenStream) -> TokenStream {
@@ -37,21 +44,31 @@ pub fn derive(input: TokenStream) -> TokenStream {
         })
         .filter(|path| matcher.is_match(path));
 
+    let mut tokens = Tokens::new();
+
     for path in match_files {
-        println!("{}", path);
+        if let Ok(contents) = read_file(&Path::new(&root).join(&path)) {
+            tokens.append(vdom::gen_impl_template_syntax(&contents));
+        } else {
+            println!("WARN: unable to parse handlebars template: {}", &path);
+        }
     }
 
-    let source = quote! {
-        struct Asdf;
-        // impl From<Asdf> for A {
-
-        // }
-    };
-
-    source.parse().unwrap()
+    tokens
+        .parse()
+        .expect("HandlebarsTemplates failed to generate template impl syntax")
 }
 
-// taken from https://github.com/vulkano-rs/vulkano/blob/master/vulkano-shader-derive/src/lib.rs
+fn read_file(path: &Path) -> std::io::Result<String> {
+    let file = File::open(path)?;
+    let mut buf_reader = BufReader::new(file);
+    let mut contents = String::new();
+    buf_reader.read_to_string(&mut contents)?;
+
+    Ok(contents)
+}
+
+// adapted from https://github.com/vulkano-rs/vulkano/blob/master/vulkano-shader-derive/src/lib.rs
 fn parse_derive_attr(attr_name: &str, input: &TokenStream) -> Option<String> {
     let syn_item = syn::parse_macro_input(&input.to_string()).unwrap();
 
