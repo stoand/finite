@@ -1,4 +1,4 @@
 [package]
 authors = ["Andreas <shadowstep7@gmail.com>"]
-name = "handlebars-vdom-parser"
+name = "handlebars_vdom_parse"
 version = "0.1.0"

@@ -1,12 +1,13 @@
 [package]
 authors = ["Andreas <shadowstep7@gmail.com>"]
-name = "handlebars-vdom-derive"
+name = "handlebars_vdom_derive"
 version = "0.1.0"
 
 [dependencies]
 globset = "0.2.1"
 quote = "0.3.15"
 syn = "0.11.11"
+handlebars_vdom_parse = { path = "../parse" }
 walkdir = "2.0.1"
 
 [lib]

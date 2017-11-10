@@ -4,6 +4,7 @@ extern crate proc_macro;
 extern crate quote;
 extern crate syn;
 extern crate walkdir;
+extern crate handlebars_vdom_parse;
 
 use std::fs::File;
 use std::io::BufReader;

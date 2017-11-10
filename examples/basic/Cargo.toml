@@ -1,0 +1,8 @@
+[package]
+name = "basic"
+version = "0.0.0"
+workspace = "../../"
+
+[dependencies]
+handlebars_vdom_derive = { path = "../../derive" }
+handlebars_vdom_parse = { path = "../../parse" }

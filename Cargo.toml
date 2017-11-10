@@ -1,5 +1,6 @@
 [workspace]
 members = [
     "derive/",
-    "parser/"
+    "parse/",
+    "examples/basic/"
 ]
