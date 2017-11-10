@@ -12,9 +12,6 @@ pub enum DiffUpdate<'a> {
 
 pub fn gen_impl_template_syntax(source: &str) -> Tokens {
     quote! {
-        // struct Asdf1;
-        impl ::handlebars_vdom_derive::vdom::VdomRenderable for String {
-
-        }
+        struct Asdf1;
     }
 }

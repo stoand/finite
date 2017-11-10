@@ -1,0 +1,14 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "parse-test",
+            "program": "${workspaceRoot}/../target/debug/handlebars_vdom_parse-test",
+            "args": [],
+            "cwd": "${workspaceRoot}",
+            "preLaunchTask": "pre-parse-test"
+        }
+    ]
+}

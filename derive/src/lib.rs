@@ -1,10 +1,10 @@
 extern crate globset;
+extern crate handlebars_vdom_parse;
 extern crate proc_macro;
 #[macro_use]
 extern crate quote;
 extern crate syn;
 extern crate walkdir;
-extern crate handlebars_vdom_parse;
 
 use std::fs::File;
 use std::io::BufReader;
@@ -49,6 +49,7 @@ pub fn derive(input: TokenStream) -> TokenStream {
 
     for path in match_files {
         if let Ok(contents) = read_file(&Path::new(&root).join(&path)) {
+            println!("{}", contents);
             tokens.append(vdom::gen_impl_template_syntax(&contents));
         } else {
             println!("WARN: unable to parse handlebars template: {}", &path);
@@ -71,13 +72,15 @@ fn read_file(path: &Path) -> std::io::Result<String> {
 
 // adapted from https://github.com/vulkano-rs/vulkano/blob/master/vulkano-shader-derive/src/lib.rs
 fn parse_derive_attr(attr_name: &str, input: &TokenStream) -> Option<String> {
-    let syn_item = syn::parse_macro_input(&input.to_string()).unwrap();
+    if let Some(syn_item) = syn::parse_macro_input(&input.to_string()).ok() {
+        let attr_value = syn_item.attrs.into_iter().next().map(|a| a.value);
 
-    let attr_value = syn_item.attrs.into_iter().next().map(|a| a.value);
-
-    match attr_value {
-        Some(NameValue(ref i, Str(ref val, _))) if i == attr_name => Some(val.clone()),
-        _ => None,
+        match attr_value {
+            Some(NameValue(ref i, Str(ref val, _))) if i == attr_name => Some(val.clone()),
+            _ => None,
+        }
+    } else {
+        None
     }
 }
 

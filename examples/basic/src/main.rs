@@ -5,4 +5,6 @@ extern crate handlebars_vdom_derive;
 #[match_files = "src/**/*.hbs"]
 struct TemplatesDummy;
 
-fn main() {}
+fn main() {
+    
+}

@@ -2,3 +2,6 @@
 authors = ["Andreas <shadowstep7@gmail.com>"]
 name = "handlebars_vdom_parse"
 version = "0.1.0"
+
+[dependencies]
+combine = "2.5.2"
