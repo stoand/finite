@@ -5,4 +5,4 @@ workspace = "../../"
 
 [dependencies]
 handlebars_vdom_derive = { path = "../../derive" }
-handlebars_vdom_parse = { path = "../../parse" }
+handlebars_vdom_parser = { path = "../../parser" }

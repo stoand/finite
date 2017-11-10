@@ -13,7 +13,7 @@ pub enum Ty {
 pub fn parse_template(source: &str) -> Result<Vec<Ty>, ParseError> {
     // partof: #SPC-parse-componentblock
 
-    // todo 
+    // todo
 
     Ok(Vec::new())
 }

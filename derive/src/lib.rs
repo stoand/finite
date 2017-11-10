@@ -1,5 +1,5 @@
 extern crate globset;
-extern crate handlebars_vdom_parse;
+extern crate handlebars_vdom_parser;
 extern crate proc_macro;
 #[macro_use]
 extern crate quote;

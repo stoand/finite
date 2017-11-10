@@ -14,5 +14,5 @@ exclude_artifact_paths = []
 # directories containing code that has artifact links
 code_paths = [
     "{repo}/derive/src",
-    "{repo}/parse/src"
+    "{repo}/parser/src"
 ]

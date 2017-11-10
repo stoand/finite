@@ -1,4 +1,4 @@
-[REQ-parse]
+[REQ-parser]
 partof = 'REQ-purpose'
 text = '''
 The handlebars template syntax as seen on [handlebarsjs.com](http://handlebarsjs.com/) will be supported.
@@ -8,14 +8,14 @@ is that multiple component templates in a single template file are both supporte
 and encouraged.
 '''
 
-[SPC-parse]
+[SPC-parser]
 text = '''
 Handlebars templates
 '''
 
-[TST-parse]
+[TST-parser]
 
-[SPC-parse-componentblock]
+[SPC-parser-componentblock]
 text = '''
 
 A component block is an area of the handlebars component
@@ -25,4 +25,4 @@ The start of a component block is declared as such: `{{! @::ComponentStructName 
 where `::ComponentStructName` is the Rust module path to a Rust struct, or enum variant
 '''
 
-[TST-parse-componentblock]
+[TST-parser-componentblock]
