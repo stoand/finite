@@ -4,8 +4,8 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "pre-parse-test",
-            "command": "rm ../target/debug/handlebars_vdom_parse-*; cargo test --no-run && rm ../target/debug/handlebars_vdom_parse-*.d && cp ../target/debug/handlebars_vdom_parse-* ../target/debug/handlebars_vdom_parse-test",
+            "label": "pre-parser-test",
+            "command": "rm ../target/debug/handlebars_vdom_parser-*; cargo test --no-run && rm ../target/debug/handlebars_vdom_parser-*.d && cp ../target/debug/handlebars_vdom_parser-* ../target/debug/handlebars_vdom_parser-test",
             "type": "shell",
             "presentation": {
                 "reveal": "never"

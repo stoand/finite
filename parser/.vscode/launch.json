@@ -4,11 +4,11 @@
         {
             "type": "lldb",
             "request": "launch",
-            "name": "parse-test",
-            "program": "${workspaceRoot}/../target/debug/handlebars_vdom_parse-test",
+            "name": "parser-test",
+            "program": "${workspaceRoot}/../target/debug/handlebars_vdom_parser-test",
             "args": [],
             "cwd": "${workspaceRoot}",
-            "preLaunchTask": "pre-parse-test"
+            "preLaunchTask": "pre-parser-test"
         }
     ]
 }
