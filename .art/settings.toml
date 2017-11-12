@@ -4,7 +4,11 @@
 #       {repo} == directory of the `.art` file
 
 # directories containing artifact toml files
-artifact_paths = ["{repo}/design"]
+artifact_paths = [
+    "{repo}/design",
+    "{repo}/derive/design",
+    "{repo}/parser/design",
+]
 
 # artifact paths to exclude. This is how you can avoid trying
 # to load .git/.hg/etc directories (or anything else you don't

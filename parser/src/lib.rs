@@ -11,10 +11,7 @@ pub enum Ty {
 }
 
 pub fn parse_template(source: &str) -> Result<Vec<Ty>, ParseError> {
-    // partof: #SPC-parse-componentblock
-
-    // todo
-
+    // partof: #SPC-parser-componentblock
     Ok(Vec::new())
 }
 
@@ -23,11 +20,19 @@ mod tests {
     use super::*;
 
     #[test]
-    // partof: #TST-parse-componentblock
+    // partof: #TST-parser-componentblock
     fn component_declarations() {
-        let parsed =
-            parse_template("{{! @CompOne }}<div></div>{{! @CompTwo }}<span></span>").unwrap();
+        let parsed = parse_template(
+            "{{! @::mod1::mod2::CompOne }}<div></div>{{! @::mod1::mod2::CompTwo }}<span></span>",
+        ).unwrap();
 
-        assert_eq!(Ty::Component("a".into(), Vec::new()), parsed[0]);
+        assert_eq!(
+            Ty::Component("::mod1::mod2::CompOne".into(), Vec::new()),
+            parsed[0]
+        );
+        assert_eq!(
+            Ty::Component("::mod1::mod2::CompTwo".into(), Vec::new()),
+            parsed[1]
+        );
     }
 }
