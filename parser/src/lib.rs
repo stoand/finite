@@ -347,7 +347,7 @@ impl<'arena> TreeSink for Sink<'arena> {
 mod tests {
     use super::*;
 
-    #[test]
+    // #[test]
     // partof: #TST-parser-componentblock
     fn component_declarations() {
         // fn main() {
@@ -366,7 +366,32 @@ mod tests {
 
     #[test]
     fn combine_test() {
-        use combine::{sep_by, Parser, many1};
-        use combine::char::{letter, space};
+        use combine::{between, many, sep_by, token, Parser, many1};
+        use combine::char::{letter, space, string};
+        use combine::combinator::{any, look_ahead, satisfy, then};
+
+        let source = "{{stu}ff}}a";
+
+        // Finish when double curly braces appear
+        let mut prev_char = ' ';
+        let not_the_end = satisfy(|t| {
+            let prev_curly_brace = prev_char == '}';
+            prev_char = t;
+            t != '}' || !prev_curly_brace
+        });
+
+        // an extra curly brace remains because we abort only after the second
+        let str_rm_end = many1::<String, _>(not_the_end).map(|mut val| {
+            val.pop();
+            val
+        });
+
+
+        // Only one curly brace at the end because the first is consumed by the inner str
+        let mut curly_braces = between((token('{'), token('{')), token('}'), str_rm_one);
+
+        let result = curly_braces.parse(source);
+        let a = 1u32;
+        assert_eq!(result, Ok(("stu}ff".to_string(), "a")));
     }
 }
