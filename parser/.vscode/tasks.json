@@ -5,7 +5,7 @@
     "tasks": [
         {
             "label": "pre-parser-test",
-            "command": "rm ../target/debug/handlebars_vdom_parser-*; cargo test --no-run && rm ../target/debug/handlebars_vdom_parser-*.d && cp ../target/debug/handlebars_vdom_parser-* ../target/debug/handlebars_vdom_parser-test",
+            "command": "rm ../target/debug/handlebars_vdom_parser-*; cargo test --features=clippy --no-run && rm ../target/debug/handlebars_vdom_parser-*.d && cp ../target/debug/handlebars_vdom_parser-* ../target/debug/handlebars_vdom_parser-test",
             "type": "shell",
             "presentation": {
                 "reveal": "never"

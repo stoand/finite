@@ -1,9 +1,12 @@
-// much of this was copied from:
+// much of this was copied  from:
 // https://github.com/servo/html5ever/blob/master/html5ever/examples/arena.rs
+#![cfg_attr(feature = "clippy", feature(plugin))]
+#![cfg_attr(feature = "clippy", plugin(clippy))]
+extern crate combine;
 extern crate html5ever;
 #[macro_use]
 extern crate markup5ever;
-extern crate typed_arena;
+pub extern crate typed_arena;
 
 use html5ever::{parse_fragment, Attribute, ExpandedName, QualName};
 use html5ever::tendril::{StrTendril, TendrilSink};
@@ -215,7 +218,7 @@ impl<'arena> TreeSink for Sink<'arena> {
 
     fn get_template_contents(&mut self, target: &Ref<'arena>) -> Ref<'arena> {
         if let NodeData::Element {
-            template_contents: Some(ref contents),
+            template_contents: Some(contents),
             ..
         } = target.data
         {
@@ -353,11 +356,17 @@ mod tests {
         let arena = typed_arena::Arena::new();
         //     html5ever_parse_slice_into_arena(&bytes, &arena);
         // }
-        let source =
-            "<--! @::mod1::mod2::CompOne --><div></div><--! @::mod1::mod2::CompTwo --><span></span>";
+        let source = "<--! @::mod1::mod2::CompOne --><div val={asdf.a}>\
+                      </div>some text .. {asdf.b}  <span></span>";
 
-        let root = html5ever_parse_slice_into_arena(&source.as_bytes(), &arena);
+        let root = html5ever_parse_slice_into_arena(source.as_bytes(), &arena);
 
         assert_eq!(format!("{:?}", root), "");
+    }
+
+    #[test]
+    fn combine_test() {
+        use combine::{sep_by, Parser, many1};
+        use combine::char::{letter, space};
     }
 }
