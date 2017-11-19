@@ -1,5 +1,5 @@
 use std::ops::{Deref, DerefMut};
-use experiment2::DomChanges;
+use std::cell::Cell;
 
 pub struct Comp<T>(T);
 
@@ -17,22 +17,29 @@ impl<T> DerefMut for Comp<T> {
     }
 }
 
+
+impl<T> Drop for Comp<T> {
+    fn drop(&mut self) {
+        println!("dropping component");
+    }
+}
+
 pub struct DomChanges {
-    changes: u32,
+    changes: Cell<u32>,
 }
 
 impl DomChanges {
-    fn new() -> DomChanges {
-        DomChanges { changes: 0 }
+    pub fn new() -> DomChanges {
+        DomChanges { changes: Cell::new(0) }
     }
 
-    fn add<T>(&mut self, state: T) -> Comp<T> {
-        self.changes += 1;
+    pub fn add<T>(&self, state: T) -> Comp<T> {
+        self.changes.set(self.changes.get() + 1);
         Comp(state)
     }
 
-    fn set<T>(&mut self, comp: &mut Comp<T>, state: T) -> &mut Self {
-        self.changes += 1;
+    pub fn set<T>(&self, state: T, comp: &mut Comp<T>) -> &Self {
+        self.changes.set(self.changes.get() + 1);
         comp.0 = state;
         self
     }
@@ -40,6 +47,6 @@ impl DomChanges {
 
 impl Drop for DomChanges {
     fn drop(&mut self) {
-        println!("OpCursor Dropped! Now perform {} operations!", self.changes);
+        println!("DomChanges Dropped! Now perform {} operations!", self.changes.get());
     }
 }

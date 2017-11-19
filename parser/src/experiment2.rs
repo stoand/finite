@@ -1,4 +1,4 @@
-use comp::Comp;
+use dom::{Comp, DomChanges};
 
 struct CounterContainer {
     message: &'static str,
@@ -7,29 +7,54 @@ struct CounterContainer {
 
 struct Counter {
     count: u32,
+    other: u32,
 }
 
 #[test]
 fn asdf1() {
     // initial rendering of the dom
     let mut root = {
-        let mut dc = DomChanges::new();
-        let counter = dc.add(Counter { count: 0 });
+        let dc = DomChanges::new();
+
         dc.add(CounterContainer {
             message: "hey",
-            counter,
+            counter: dc.add(Counter { count: 0, other: 0 }),
         })
     };
 
+    // root.counter.count += 1;
+
     {
-        // let mut dc = ;
-        // root.counter.set(dc, Counter { count: 32 });
-        DomChanges::new()
-            .set(&mut root.counter, Counter { count: 3 })
-            .set(&mut root.counter, Counter { count: 23 });
+        DomChanges::new().set(
+            Counter {
+                count: 3,
+                ..*root.counter
+            },
+            &mut root.counter,
+        );
+
     }
 
     {
-        DomChanges::new().set(&mut root.counter, Counter { count: 93 });
+        DomChanges::new().set(
+            Counter {
+                count: 93,
+                other: 0,
+            },
+            &mut root.counter,
+        );
     }
+
+    {
+        let dc = DomChanges::new();
+        dc.set(
+            CounterContainer {
+                counter: dc.add(Counter { count: 3, other: 3 }),
+                ..*root
+            },
+            &mut root,
+        );
+    }
+
+    println!("drop those refs");
 }
