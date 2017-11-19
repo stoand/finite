@@ -4,9 +4,10 @@ name = "handlebars_vdom_parser"
 version = "0.1.0"
 
 [dependencies]
-combine = "2.5.2"
+futures-await = "0.1.0"
 html5ever = "0.21.0"
 markup5ever = "0.6.2"
+nom = "3.2.1"
 typed-arena = "1.3.0"
 
 [dependencies.clippy]

@@ -6,7 +6,7 @@
             "request": "launch",
             "name": "parser-test",
             "program": "${workspaceRoot}/../target/debug/handlebars_vdom_parser-test",
-            "args": [],
+            "args": ["--nocapture"],
             "cwd": "${workspaceRoot}",
             "preLaunchTask": "pre-parser-test",
             "terminal": "integrated"
