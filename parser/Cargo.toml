@@ -8,6 +8,7 @@ futures-await = "0.1.0"
 html5ever = "0.21.0"
 markup5ever = "0.6.2"
 nom = "3.2.1"
+stdweb = "0.1.3"
 typed-arena = "1.3.0"
 
 [dependencies.clippy]

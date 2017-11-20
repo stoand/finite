@@ -1,3 +1,4 @@
+
 use dom::{Comp, DomChanges};
 
 struct CounterContainer {
@@ -22,6 +23,8 @@ fn asdf1() {
         })
     };
 
+    // DomChanges::new().set(&mut root.counter, );
+
     // root.counter.count += 1;
 
     {
@@ -32,29 +35,36 @@ fn asdf1() {
             },
             &mut root.counter,
         );
-
     }
 
     {
-        DomChanges::new().set(
-            Counter {
-                count: 93,
-                other: 0,
-            },
-            &mut root.counter,
-        );
+        let n = Counter {
+            count: 3,
+            ..*root.counter
+        };
+        // root.counter.set(n);
     }
 
-    {
-        let dc = DomChanges::new();
-        dc.set(
-            CounterContainer {
-                counter: dc.add(Counter { count: 3, other: 3 }),
-                ..*root
-            },
-            &mut root,
-        );
-    }
+    // {
+    //     DomChanges::new().set(
+    //         Counter {
+    //             count: 93,
+    //             other: 0,
+    //         },
+    //         &mut root.counter,
+    //     );
+    // }
+
+    // {
+    //     let dc = DomChanges::new();
+    //     dc.set(
+    //         CounterContainer {
+    //             counter: dc.add(Counter { count: 3, other: 3 }),
+    //             ..*root
+    //         },
+    //         &mut root,
+    //     );
+    // }
 
     println!("drop those refs");
 }
