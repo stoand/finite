@@ -1,14 +1,13 @@
+use dom::{Comp, DomChanges};
 
-use dom::{Comp, DomChanges, ChangeSet};
-
-#[derive(Clone, PartialEq, Debug)]
+#[derive(Clone, PartialEq, Debug, Hash)]
 struct CounterContainer {
     num: u32,
     message: String,
     counter: Comp<Counter>,
 }
 
-#[derive(Clone, PartialEq, Debug)]
+#[derive(Clone, PartialEq, Debug, Hash)]
 struct Counter {
     count: u32,
     other: u32,
@@ -28,68 +27,12 @@ fn asdf1() {
     };
 
 
-    {
-        // root.ob().comp.message = "asdf".into();
-        // root.ob().comp.num = 1234;
-        // root.ob().message = "sdf";
+    let c = &mut DomChanges::new();
+    root[c].counter[c].count = 33;
+    root[c].counter[c].count = 1;
 
-        // let mut a = root.ob();
-        // a.counter.ob().count = 1234;
-
-        let c = &mut ChangeSet::new();
-        root[c].counter[c].count = 33;
-
-        // let mut counter = root.counter.ob(&mut ob);
-        // counter.count = 1234;
-        println!("count: {}", root.counter.count);
-        println!("dont drop it yet");
-    }
-
-    // println!("asdf {}", root.message);
-
-    // DomChanges::new().set(&mut root.counter, );
-
-    // root.counter.count += 1;
-
-    // {
-    //     DomChanges::new().set(
-    //         Counter {
-    //             count: 3,
-    //             ..*root.counter
-    //         },
-    //         &mut root.counter,
-    //     );
-    // }
-
-    // {
-    //     let n = Counter {
-    //         count: 3,
-    //         ..*root.counter
-    //     };
-    //
-    //     root.counter.set(n);
-    // }
-
-    // {
-    //     DomChanges::new().set(
-    //         Counter {
-    //             count: 93,
-    //             other: 0,
-    //         },
-    //         &mut root.counter,
-    //     );
-    // }
-
-    // {
-    //     let dc = DomChanges::new();
-    //     dc.set(
-    //         CounterContainer {
-    //             counter: dc.add(Counter { count: 3, other: 3 }),
-    //             ..*root
-    //         },
-    //         &mut root,
-    //     );
-    // }
-
-    println!("drop those refs");
+    // let mut counter = root.counter.ob(&mut ob);
+    // counter.count = 1234;
+    println!("count: {}", root.counter.count);
+    println!("dont drop it yet");
 }

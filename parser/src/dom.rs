@@ -1,66 +1,48 @@
-use std::ops::{Deref, DerefMut, Add, Index, IndexMut};
+use std::ops::{Deref, Index, IndexMut};
 use std::cell::Cell;
-use std::fmt::Debug;
-
-#[derive(Clone, PartialEq, Debug)]
-pub struct Comp<T>(pub T);
+use std::collections::hash_map::DefaultHasher;
+use std::hash::{Hash, Hasher};
 
 
-pub struct ChangeSet;
+#[derive(Clone, PartialEq, Debug, Hash)]
+pub struct Comp<T: Hash>(T);
 
-impl ChangeSet {
-    pub fn new() -> Self {
-        ChangeSet {}
+trait Renderable {
+    fn hash_inner_state(&self) -> u64;
+
+    fn render_template(&self) -> String;
+}
+
+impl<T: Hash> Renderable for Comp<T> {
+    fn hash_inner_state(&self) -> u64 {
+        let mut hasher = DefaultHasher::new();
+        self.0.hash(&mut hasher);
+        hasher.finish()
+    }
+
+    fn render_template(&self) -> String {
+        "".into()
     }
 }
 
-impl<'a, T: Clone + PartialEq + Debug> Index<&'a mut ChangeSet> for Comp<T> {
+impl<'a, 'b, T: Hash> Index<&'a mut DomChanges<'b>> for Comp<T> {
     type Output = T;
 
-    fn index<'b>(&'b self, index: &'a mut ChangeSet) -> &'b T {
+    // do nothing - this is just necessary because
+    // indexMut is required to have the same output
+    fn index<'c>(&'c self, _: &'a mut DomChanges) -> &'c T {
         &self.0
     }
 }
 
-impl<'a, T: Clone + PartialEq + Debug> IndexMut<&'a mut ChangeSet> for Comp<T> {
-    fn index_mut<'b>(&'b mut self, index: &'a mut ChangeSet) -> &'b mut T {
+impl<'a, 'b, T: Hash> IndexMut<&'a mut DomChanges<'b>> for Comp<T> {
+    fn index_mut<'c>(&'c mut self, changes: &'a mut DomChanges) -> &'c mut T {
+        // changes.components.push(&self);
         &mut self.0
     }
 }
 
-// impl<T: Clone + PartialEq + Debug> Comp<T> {
-//     pub fn ob<'a, N>(&'a mut self, observer: &'a mut Observer<'a, T>) -> &'a mut Observer<'a, T> {
-//         observer.observe(self);
-//         observer
-//     }
-
-//     pub fn c(&mut self, _change_set: &mut ChangeSet) -> &mut T {
-//         &mut self.0
-//     }
-// }
-
-// pub struct Observer<'a, T: 'a + Clone + PartialEq + Debug> {
-//     pub comp: Option<&'a mut Comp<T>>,
-//     pub orig_state: Option<T>,
-// }
-
-// impl<'a, T: Clone + PartialEq + Debug> Observer<'a, T> {
-//     pub fn new() -> Observer<'a, T> {
-//         Observer {
-//             comp: None,
-//             orig_state: None,
-//             // orig_state: comp.0.clone(),
-//             // comp,
-//         }
-//     }
-
-//     fn observe(&mut self, comp: &'a mut Comp<T>) {
-//         self.comp = Some(comp);
-//     }
-// }
-
-
-impl<T: Clone + PartialEq + Debug> Deref for Comp<T> {
+impl<T: Hash> Deref for Comp<T> {
     type Target = T;
 
     fn deref(&self) -> &T {
@@ -68,69 +50,37 @@ impl<T: Clone + PartialEq + Debug> Deref for Comp<T> {
     }
 }
 
-// impl<T: Clone + PartialEq + Debug> DerefMut for Comp<T> {
-//     fn deref_mut(&mut self) -> &mut T {
-//         &mut self.0
-//     }
-// }
-
-// impl<'a, T: Clone + PartialEq + Debug> Deref for Observer<'a, T> {
-//     type Target = T;
-
-//     fn deref(&self) -> &T {
-//         &self.comp.unwrap().0
-//     }
-// }
-
-// impl<'a, T: Clone + PartialEq + Debug> DerefMut for Observer<'a, T> {
-//     fn deref_mut(&mut self) -> &mut T {
-//         &mut self.comp.unwrap().0
-//     }
-// }
-
-
-// impl<'a, T: Clone + PartialEq + Debug> Drop for Observer<'a, T> {
-//     fn drop(&mut self) {
-//         if let (&Some(ref a), &Some(ref b)) = (&self.comp, &self.orig_state) {
-
-//             println!("got val {:?}", b);
-
-//             // if a.0 != b {
-//             //     println!(
-//             //         "observer dropped, found changes: {:?}",
-//             //         self.comp.unwrap().0
-//             //     );
-//             // } else {
-//             //     println!("observer dropped, no changes: {:?}", self.comp.unwrap().0);
-//             // }
-//         }
-//     }
-// }
-
-pub struct DomChanges {
+pub struct DomChanges<'a> {
     changes: Cell<u32>,
+    components: Vec<&'a Renderable>,
+    // components: Vec<Box<Renderable>>,
 }
 
-impl DomChanges {
-    pub fn new() -> DomChanges {
+// pub struct DomChanges1<'a> {
+//     changes: Cell<u32>,
+// }
+
+impl<'a> DomChanges<'a> {
+    pub fn new() -> DomChanges<'a> {
         DomChanges {
             changes: Cell::new(0),
+            components: Vec::new()
         }
     }
 
-    pub fn add<T>(&self, state: T) -> Comp<T> {
+    pub fn add<T: Hash>(&self, state: T) -> Comp<T> {
         self.changes.set(self.changes.get() + 1);
         Comp(state)
     }
 
-    pub fn set<T>(self, state: T, comp: &mut Comp<T>) -> Self {
+    pub fn set<T: Hash>(self, state: T, comp: &mut Comp<T>) -> Self {
         self.changes.set(self.changes.get() + 1);
         comp.0 = state;
         self
     }
 }
 
-impl Drop for DomChanges {
+impl<'a> Drop for DomChanges<'a> {
     fn drop(&mut self) {
         println!(
             "DomChanges Dropped! Now perform {} operations!",
