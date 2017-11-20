@@ -1,11 +1,14 @@
 
-use dom::{Comp, DomChanges};
+use dom::{Comp, DomChanges, ChangeSet};
 
+#[derive(Clone, PartialEq, Debug)]
 struct CounterContainer {
-    message: &'static str,
+    num: u32,
+    message: String,
     counter: Comp<Counter>,
 }
 
+#[derive(Clone, PartialEq, Debug)]
 struct Counter {
     count: u32,
     other: u32,
@@ -18,32 +21,54 @@ fn asdf1() {
         let dc = DomChanges::new();
 
         dc.add(CounterContainer {
-            message: "hey",
+            num: 0,
+            message: "hey".into(),
             counter: dc.add(Counter { count: 0, other: 0 }),
         })
     };
+
+
+    {
+        // root.ob().comp.message = "asdf".into();
+        // root.ob().comp.num = 1234;
+        // root.ob().message = "sdf";
+
+        // let mut a = root.ob();
+        // a.counter.ob().count = 1234;
+
+        let c = &mut ChangeSet::new();
+        root[c].counter[c].count = 33;
+
+        // let mut counter = root.counter.ob(&mut ob);
+        // counter.count = 1234;
+        println!("count: {}", root.counter.count);
+        println!("dont drop it yet");
+    }
+
+    // println!("asdf {}", root.message);
 
     // DomChanges::new().set(&mut root.counter, );
 
     // root.counter.count += 1;
 
-    {
-        DomChanges::new().set(
-            Counter {
-                count: 3,
-                ..*root.counter
-            },
-            &mut root.counter,
-        );
-    }
+    // {
+    //     DomChanges::new().set(
+    //         Counter {
+    //             count: 3,
+    //             ..*root.counter
+    //         },
+    //         &mut root.counter,
+    //     );
+    // }
 
-    {
-        let n = Counter {
-            count: 3,
-            ..*root.counter
-        };
-        // root.counter.set(n);
-    }
+    // {
+    //     let n = Counter {
+    //         count: 3,
+    //         ..*root.counter
+    //     };
+    //
+    //     root.counter.set(n);
+    // }
 
     // {
     //     DomChanges::new().set(
