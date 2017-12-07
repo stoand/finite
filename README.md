@@ -1,5 +1,8 @@
 # Handlebars Virtual Dom
 
+
+### NONE OF THIS IS IMPLEMENTED YET!!
+
 A Rust browser template rendering library
 
 Requires Rust to be compiled to Webassembly or Javascript with Emscripten
